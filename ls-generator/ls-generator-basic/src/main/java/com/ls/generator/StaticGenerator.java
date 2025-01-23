@@ -99,7 +99,6 @@ public class StaticGenerator {
         File output = new File(rootPath,"generator");
 
         copyFileByRecursive(input,output);
-        System.out.println("静态文件生成完成"+output.toPath());
     }
 }
 
