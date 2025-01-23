@@ -4,12 +4,12 @@ import java.util.Scanner;
 
 /**
 * ACM 输入模板（多数之和）
-* @author:${author}
+* @author:${author!"hnsqls"}
 */
 public class MainTemplate {
 public static void main(String[] args) {
 Scanner scanner = new Scanner(System.in);
-<#if isWhile>
+<#if (isWhile!false)>
     while (scanner.hasNext()) {
 </#if>
 
@@ -29,8 +29,8 @@ for (int num : arr) {
 sum += num;
 }
 
-System.out.println("Sum: " + sum);
-<#if isWhile>
+System.out.println("${output!"sum"}: " + sum);
+<#if (isWhile!false)>
     }
 </#if>
 

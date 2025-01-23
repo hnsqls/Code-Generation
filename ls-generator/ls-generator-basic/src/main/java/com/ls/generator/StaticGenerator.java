@@ -54,7 +54,7 @@ public class StaticGenerator {
     private static void copyFileByRecursive(File inputFile, File outputFile) throws IOException {
         // 区分是文件还是目录
         if (inputFile.isDirectory()) {
-            System.out.println(inputFile.getName());
+//            System.out.println(inputFile.getName());
             File destOutputFile = new File(outputFile, inputFile.getName());
             // 如果是目录，首先创建目标目录
             if (!destOutputFile.exists()) {
@@ -77,35 +77,29 @@ public class StaticGenerator {
         }
     }
 
-
-
-
-
     /**
-     * 递归遍历文件测试
-     * @param directory
+     * 执行入口
+     * 执行静态文件的生成
+     * @param args
      */
-    public static void traverseFiles(File directory) {
-        // 如果是目录
-        if (directory.isDirectory()) {
-            // 获取当前目录下的所有文件和子目录
-            File[] files = directory.listFiles();
+    public static void main(String[] args) throws IOException {
 
-            if (files != null) {
-                // 遍历每一个文件和子目录
-                for (File file : files) {
-                    // 如果是文件，复制文件
-                    if (file.isFile()) {
+        //获取项目根路径
+        String rootPath = System.getProperty("user.dir");
+        System.out.println("rootPath = " + rootPath);
+        //获取项目根路径的父路径
+        String parentPath = new File(rootPath).getParent();
+        System.out.println("parentPath = " + parentPath);
 
-                    }
-                    // 如果是目录，递归调用
-                    else if (file.isDirectory()) {
-                        System.out.println("Directory: " + file.getAbsolutePath());
-                        traverseFiles(file); // 递归遍历子目录
-                    }
-                }
-            }
-        }
+        // 输入文件的位置
+        File input = new File(parentPath,"ls-generator-demo");
+
+
+        //输出文件的位置
+        File output = new File(rootPath,"generator");
+
+        copyFileByRecursive(input,output);
+        System.out.println("静态文件生成完成"+output.toPath());
     }
 }
 
