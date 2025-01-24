@@ -1,5 +1,6 @@
 package com.ls.generator;
 
+import com.ls.model.MainTemplateModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -12,28 +13,28 @@ import java.util.HashMap;
 public class DynamicGenerator {
     /**
      *
-     * @param input 输入文件也就是模板文件地址
-
+     * @param inputFilePath 输入文件也就是模板文件地址
+     * @param outputFilePath 输出文件地址
      * @param author   作者
      * @param put      输出信息
      * @param isWhile  是否开启循环
      * @throws IOException
      * @throws TemplateException
      */
-    public static void dynamicGenerator(String input,String author,String put ,Boolean isWhile) throws IOException, TemplateException {
+    public static void dynamicGenerator(String inputFilePath,String outputFilePath,String author,String put ,Boolean isWhile) throws IOException, TemplateException {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_32);
 
-        String templatesPath = new File(input).getParentFile().getPath();
+        String templatesPath = new File(inputFilePath).getParentFile().getPath();
 //        configuration.setDirectoryForTemplateLoading(new File("./src/main/resources/templates"));
         configuration.setDirectoryForTemplateLoading(new File(templatesPath));
 
         configuration.setDefaultEncoding("UTF-8");
 
-        String inputName = new File(input).getName();
+        String inputName = new File(inputFilePath).getName();
 
 
         //加载模板
-        Template template = configuration.getTemplate(new File(input).getName());
+        Template template = configuration.getTemplate(inputName);
 
         // 构造数据
         HashMap<String, Object> data = new HashMap<>();
@@ -42,7 +43,8 @@ public class DynamicGenerator {
         data.put("isWhile", isWhile);
 
         // 生成动态代码位置
-        FileWriter out = new FileWriter(inputName);
+//        FileWriter out = new FileWriter(inputName); //默认根路径
+        FileWriter out = new FileWriter(new File(outputFilePath,inputName));
 
         // 生成动态代码
         template.process(data, out);
@@ -50,18 +52,73 @@ public class DynamicGenerator {
         out.close();
         //项目的根目录
         String rootPath = System.getProperty("user.dir");
-        System.out.println("动态生成代码成功：" + rootPath +"/"+ inputName);
+        System.out.println("动态生成代码成功：" + rootPath+outputFilePath +"/"+ inputName);
 
 
     }
+
+    /**
+     *
+     * @param inputFilePath
+     * @param outputFilePath
+     * @param model
+     * @throws IOException
+     * @throws TemplateException
+     */
+
+    public static void dynamicGenerator(String inputFilePath, String outputFilePath, MainTemplateModel model) throws IOException, TemplateException {
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_32);
+
+        String templatesPath = new File(inputFilePath).getParentFile().getPath();
+//        configuration.setDirectoryForTemplateLoading(new File("./src/main/resources/templates"));
+        configuration.setDirectoryForTemplateLoading(new File(templatesPath));
+
+        configuration.setDefaultEncoding("UTF-8");
+
+        String inputName = new File(inputFilePath).getName();
+
+
+        //加载模板
+        Template template = configuration.getTemplate(inputName);
+
+        // 构造数据   --- 》 传参model
+
+        // 生成动态代码位置
+//        FileWriter out = new FileWriter(inputName); //默认根路径
+        FileWriter out = new FileWriter(new File(outputFilePath,inputName));
+
+        // 生成动态代码
+        template.process(model, out);
+
+        out.close();
+        //项目的根目录
+        String rootPath = System.getProperty("user.dir");
+        System.out.println("动态生成代码成功：" + rootPath+outputFilePath +"/"+ inputName);
+
+
+    }
+
 
     /**
      * 动态代码生成执行入口
      * @param args
      */
     public static void main(String[] args) throws TemplateException, IOException {
+        //方法一
         dynamicGenerator("./src/main/resources/templates/AcmTemplate.java.ftl",
+                "./src/main/java/com/ls/generator",
                 "ls","com.ls.acm",true);
+
+
+        //方法二
+        MainTemplateModel model = new MainTemplateModel();
+        model.setAuthor("ls");
+        model.setLoop(false);
+        model.setOutput("输出");
+
+        dynamicGenerator("./src/main/resources/templates/AcmTemplate.java.ftl",
+                "./src/main/java/com/ls/",
+                model);
 
 
     }

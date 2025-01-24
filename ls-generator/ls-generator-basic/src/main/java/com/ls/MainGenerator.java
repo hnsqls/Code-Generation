@@ -27,7 +27,7 @@ public class MainGenerator {
         StaticGenerator.copyFilesByRecursive(staticfile.getPath(),rootPath);
 
         //生成动态代码
-        DynamicGenerator.dynamicGenerator(dynamicPath,"ls","ls-generator-demo",true);
+        DynamicGenerator.dynamicGenerator(dynamicPath,"","ls","ls-generator-demo",true);
     }
 
 
