@@ -6,7 +6,7 @@ import java.util.Scanner;
 * ACM 输入模板（多数之和）
 * @author:${author!"hnsqls"}
 */
-public class MainTemplate {
+public class AcmTemplate {
 public static void main(String[] args) {
 Scanner scanner = new Scanner(System.in);
 <#if (isWhile!false)>

@@ -30,11 +30,13 @@ public class DynamicGenerator {
 
         configuration.setDefaultEncoding("UTF-8");
 
+        // xxx.java.ftl
         String inputName = new File(inputFilePath).getName();
 
 
         //加载模板
         Template template = configuration.getTemplate(inputName);
+
 
         // 构造数据
         HashMap<String, Object> data = new HashMap<>();
@@ -42,9 +44,15 @@ public class DynamicGenerator {
         data.put("output", put);
         data.put("isWhile", isWhile);
 
+        //xxx.java.ftl ----> xxx.java
+        String outputName = inputName.replace(".ftl", "");
+
         // 生成动态代码位置
-//        FileWriter out = new FileWriter(inputName); //默认根路径
-        FileWriter out = new FileWriter(new File(outputFilePath,inputName));
+//        FileWriter out = new FileWriter(outputName); //默认根路径
+        if (outputFilePath == null || outputFilePath.equals("")){
+FileWriter out = new FileWriter(outputName); //默认根路径
+        }
+        FileWriter out = new FileWriter(new File(outputFilePath,outputName));
 
         // 生成动态代码
         template.process(data, out);
@@ -52,7 +60,7 @@ public class DynamicGenerator {
         out.close();
         //项目的根目录
         String rootPath = System.getProperty("user.dir");
-        System.out.println("动态生成代码成功：" + rootPath+outputFilePath +"/"+ inputName);
+        System.out.println("动态生成代码成功：" + rootPath+outputFilePath +"/"+ outputName);
 
 
     }
@@ -83,9 +91,15 @@ public class DynamicGenerator {
 
         // 构造数据   --- 》 传参model
 
+        //xxx.java.ftl ----> xxx.java
+        String outputName = inputName.replace(".ftl", "");
+
         // 生成动态代码位置
 //        FileWriter out = new FileWriter(inputName); //默认根路径
-        FileWriter out = new FileWriter(new File(outputFilePath,inputName));
+        if (outputFilePath == null || outputFilePath.equals("")){
+            FileWriter out = new FileWriter(outputName); //默认根路径
+        }
+        FileWriter out = new FileWriter(new File(outputFilePath,outputName));
 
         // 生成动态代码
         template.process(model, out);
@@ -93,7 +107,7 @@ public class DynamicGenerator {
         out.close();
         //项目的根目录
         String rootPath = System.getProperty("user.dir");
-        System.out.println("动态生成代码成功：" + rootPath+outputFilePath +"/"+ inputName);
+        System.out.println("动态生成代码成功：" + rootPath+outputFilePath +"/"+ outputName);
 
 
     }
